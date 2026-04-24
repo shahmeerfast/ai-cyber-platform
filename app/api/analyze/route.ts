@@ -5,7 +5,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { openai, AI_MODEL } from '@/lib/openai';
+import { getOpenAIClient, AI_MODEL } from '@/lib/openai';
 import { SYSTEM_PROMPT, buildAnalysisPrompt, AttackScenarioId } from '@/lib/prompts';
 
 export const runtime = 'edge';
@@ -23,6 +23,7 @@ export async function POST(request: NextRequest) {
     }
 
     const userMessage = buildAnalysisPrompt(scenarioId, customPayload);
+    const openai = getOpenAIClient();
 
     const stream = await openai.chat.completions.create({
       model: AI_MODEL,
